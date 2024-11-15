@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['middleware' => 'role:admin'], function () {
+
+});
+
+Route::group(['middleware' => 'role:user'], function () {
+
+});
