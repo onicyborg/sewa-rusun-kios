@@ -44,7 +44,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'role' => [
+            \App\Http\Middleware\RoleMiddleware::class,
+        ]
     ];
 
     /**

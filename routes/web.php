@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Route lainnya untuk admin atau user
+    Route::group(['middleware' => 'role:admin'], function () {
+        // Route khusus admin
+    });
+
+    Route::group(['middleware' => 'role:user'], function () {
+        // Route khusus user
+    });
 });
 
-Route::group(['middleware' => 'role:admin'], function () {
-
-});
-
-Route::group(['middleware' => 'role:user'], function () {
-
-});
+Route::get('/login', function(){
+    return view('login');
+})->name('login');
+Route::get('/register', function(){
+    return view('register');
+})->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
