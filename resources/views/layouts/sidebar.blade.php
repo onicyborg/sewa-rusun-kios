@@ -8,19 +8,19 @@
                 <h4 class="text-section">MAIN</h4>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/">
                     <i class="fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/manage-penghuni">
                     <i class="fas fa-users"></i>
                     <p>Data Penghuni</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/manage-rusun">
                     <i class="fas fa-building"></i>
                     <p>Data Rusun</p>
                 </a>

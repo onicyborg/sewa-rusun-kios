@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RusunController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Route lainnya untuk admin atau user
     Route::group(['middleware' => 'role:admin'], function () {
-        // Route khusus admin
+        Route::get('/manage-rusun', [RusunController::class, 'index']);
+        Route::post('/manage-rusun/store', [RusunController::class, 'store'])->name('rusun.store');
+        Route::put('/manage-rusun/update', [RusunController::class, 'update'])->name('rusun.update');
+        Route::delete('/manage-rusun/delete', [RusunController::class, 'destroy'])->name('rusun.delete');
+
+        //datatables
+        Route::get('/rusun-data', [RusunController::class, 'getData']);
     });
 
     Route::group(['middleware' => 'role:user'], function () {
