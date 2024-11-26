@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('ttl')->nullable();
             $table->string('pendidikan')->nullable();
             $table->string('jenis_pekerjaan')->nullable();
-            $table->bigInteger('penghasilan')->unique()->nullable();
-            $table->enum('gender', ['Pria', 'Wanita'])->unique()->nullable();
+            $table->bigInteger('penghasilan')->nullable();
+            $table->enum('gender', ['Pria', 'Wanita'])->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'user']);
             $table->string('foto')->nullable()->unique();

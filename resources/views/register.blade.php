@@ -204,6 +204,11 @@
         document.getElementById('whatsapp').addEventListener('input', function(event) {
             // Menghapus semua karakter yang bukan angka
             this.value = this.value.replace(/[^0-9]/g, '');
+
+            // Mencegah angka 0 di awal
+            if (this.value.startsWith('0')) {
+                this.value = this.value.slice(1); // Hapus karakter pertama jika 0
+            }
         });
         document.getElementById('penghasilan').addEventListener('input', function(event) {
             // Menghapus semua karakter yang bukan angka

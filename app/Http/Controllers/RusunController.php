@@ -75,27 +75,6 @@ class RusunController extends Controller
             $data = Rusun::query(); // Ganti dengan query untuk mendapatkan data rusun
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('aksi', function ($row) {
-                    return '
-                        <button type="button" class="btn btn-sm btn-warning editButton"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editModal"
-                            data-id="' . $row->id . '"
-                            data-nomor_rusun="' . $row->nomor_rusun . '"
-                            data-lantai="' . $row->lantai . '"
-                            data-tower="' . $row->tower . '"
-                            data-harga_sewa="' . $row->harga_sewa . '">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-danger deleteButton"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"
-                            data-id="' . $row->id . '"
-                            data-nomor_rusun="' . $row->nomor_rusun . '">
-                            <i class="fas fa-trash"></i>
-                        </button>';
-                })
-                ->rawColumns(['aksi'])
                 ->make(true);
         }
     }

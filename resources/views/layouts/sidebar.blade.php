@@ -26,13 +26,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/manage-kios">
                     <i class="fas fa-store"></i>
                     <p>Data Kios</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/manage-mekanikal">
                     <i class="fas fa-wrench"></i>
                     <p>Data Mekanikal</p>
                 </a>
@@ -44,7 +44,7 @@
                 <h4 class="text-section">MASTER TRANSAKSI DAN KELUHAN</h4>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/sewa-rusun">
                     <i class="fas fa-file-contract"></i>
                     <p>Transaksi Sewa Rusun</p>
                 </a>
