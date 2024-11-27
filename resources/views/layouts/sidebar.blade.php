@@ -56,7 +56,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/sewa-gedung">
                     <i class="fas fa-warehouse"></i>
                     <p>Transaksi Sewa Gedung</p>
                 </a>

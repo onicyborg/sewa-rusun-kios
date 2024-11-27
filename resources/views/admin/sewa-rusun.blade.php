@@ -389,7 +389,17 @@
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
+                        render: function(data, type, row) {
+                            // Kondisi untuk menampilkan badge sesuai status
+                            if (data === 'Release') {
+                                return `<span class="badge badge-success">Release</span>`;
+                            } else if (data === 'Draft') {
+                                return `<span class="badge badge-danger">Draft</span>`;
+                            } else {
+                                return `<span class="badge badge-secondary">Unknown</span>`;
+                            }
+                        }
                     }, // Menampilkan status: Release/Draft
                     {
                         data: 'tagihan_dibayar',

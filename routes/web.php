@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KiosController;
 use App\Http\Controllers\MekanikalController;
 use App\Http\Controllers\RusunController;
+use App\Http\Controllers\SewaGedungController;
 use App\Http\Controllers\SewaRusunController;
 use App\Http\Controllers\TagihanRusunController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,13 @@ Route::middleware(['check.expired'])->group(function () {
             Route::put('/sewa-rusun/update/{id}', [SewaRusunController::class, 'update'])->name('sewa-rusun.update');
             Route::post('/tagihan-rusun/add', [TagihanRusunController::class, 'tagihan_bulanan']);
             Route::get('/detail-tagihan-bulanan/{bulan}/{tahun}', [TagihanRusunController::class, 'detail_tagihan']);
+            Route::put('/update-tagihan/{id}', [TagihanRusunController::class, 'update_tagihan'])->name('update.tagihan');
+            Route::post('/release-tagihan/{bulan}/{tahun}', [TagihanRusunController::class, 'release_tagihan'])->name('release.tagihan');
+
+            Route::get('/sewa-gedung', [SewaGedungController::class, 'index']);
+            Route::post('/sewa-gedung/store', [SewaGedungController::class, 'store'])->name('sewa-gedung.store');
+            Route::put('/sewa-gedung/update', [SewaGedungController::class, 'update'])->name('sewa-gedung.update');
+            Route::delete('/sewa-gedung/destroy', [SewaGedungController::class, 'destroy'])->name('sewa-gedung.destroy');
 
             //datatables
             Route::get('/rusun-data', [RusunController::class, 'getData']);
