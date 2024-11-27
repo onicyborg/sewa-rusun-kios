@@ -20,7 +20,7 @@ class adminSeeder extends Seeder
             'password' => Hash::make('admin123'), // Ganti dengan password sesuai kebutuhan
             'role' => 'admin', // Set role sebagai admin
             'name' => 'Administrator', // Default value agar tidak kosong
-            'email' => null, // Kosongkan kolom email sesuai instruksi
+            'email' => 'admin@gmail.com', // Kosongkan kolom email sesuai instruksi
             'created_at' => now(),
             'updated_at' => now(),
         ]);

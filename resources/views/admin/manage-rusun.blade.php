@@ -34,6 +34,7 @@
                                     <th>Lantai</th>
                                     <th>Tower</th>
                                     <th>Harga Sewa</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -44,6 +45,7 @@
                                     <th>Lantai</th>
                                     <th>Tower</th>
                                     <th>Harga Sewa</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </tfoot>
@@ -183,6 +185,42 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.editButton')) {
+                    const button = e.target.closest('.editButton'); // Pastikan elemen tombol yang dipilih
+                    const id = button.getAttribute('data-id');
+                    const nomorRusun = button.getAttribute('data-nomor_rusun');
+                    const lantai = button.getAttribute('data-lantai');
+                    const tower = button.getAttribute('data-tower');
+                    const hargaSewa = button.getAttribute('data-harga_sewa');
+
+                    // Isi data ke dalam form
+                    editForm.querySelector('#editId').value = id;
+                    editForm.querySelector('#editNomorRusun').value = nomorRusun;
+                    editForm.querySelector('#editLantai').value = lantai;
+                    editForm.querySelector('#editTower').value = tower;
+                    editForm.querySelector('#editHargaSewa').value = hargaSewa;
+                }
+            });
+
+            // Event listener untuk tombol Delete
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.deleteButton')) {
+                    const button = e.target.closest('.deleteButton'); // Tombol yang memicu modal
+                    const id = button.getAttribute('data-id'); // Ambil data-id
+                    const nomorRusun = button.getAttribute('data-nomor_rusun'); // Ambil data-nomor_rusun
+
+                    // Masukkan ID ke dalam input hidden
+                    const deleteIdInput = deleteModal.querySelector('#deleteId');
+                    deleteIdInput.value = id;
+
+                    // Perbarui teks konfirmasi dengan nomor rusun
+                    const confirmationText = deleteModal.querySelector('#deleteConfirmationText');
+                    confirmationText.textContent =
+                        `Apakah Anda yakin ingin menghapus data rusun ${nomorRusun}?`;
+                }
+            });
+
             $('#rusunTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -208,6 +246,18 @@
                     {
                         data: 'harga_sewa',
                         name: 'harga_sewa'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        render: function(data, type, row) {
+                            if (data === 'Kosong') {
+                                return '<span class="badge badge-success">Kosong / Belum Disewa</span>';
+                            } else if (data === 'Disewa') {
+                                return '<span class="badge badge-danger">Tidak Kosong / Disewa</span>';
+                            }
+                            return '<span class="badge badge-secondary">Status Tidak Diketahui</span>'; // Jika data tidak valid
+                        }
                     },
                     {
                         data: null,
@@ -239,41 +289,6 @@
                     },
                 ],
             });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.editButton')) {
-                const id = e.target.getAttribute('data-id');
-                const nomorRusun = e.target.getAttribute('data-nomor_rusun');
-                const lantai = e.target.getAttribute('data-lantai');
-                const tower = e.target.getAttribute('data-tower');
-                const hargaSewa = e.target.getAttribute('data-harga_sewa');
-
-                // Isi data ke dalam form
-                editForm.querySelector('#editId').value = id;
-                editForm.querySelector('#editNomorRusun').value = nomorRusun;
-                editForm.querySelector('#editLantai').value = lantai;
-                editForm.querySelector('#editTower').value = tower;
-                editForm.querySelector('#editHargaSewa').value = hargaSewa;
-            }
-        });
-
-        // Event listener untuk tombol Delete
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.deleteButton')) {
-                const button = event.relatedTarget; // Tombol yang memicu modal
-                const id = button.getAttribute('data-id'); // Ambil data-id
-                const nomorRusun = button.getAttribute('data-nomor_rusun'); // Ambil data-nomor_rusun
-
-                // Masukkan ID ke dalam input hidden
-                const deleteIdInput = deleteModal.querySelector('#deleteId');
-                deleteIdInput.value = id;
-
-                // Perbarui teks konfirmasi dengan nomor rusun
-                const confirmationText = deleteModal.querySelector('#deleteConfirmationText');
-                confirmationText.textContent =
-                    `Apakah Anda yakin ingin menghapus data rusun ${nomorRusun}?`;
-            }
         });
 
         @if (session('success'))

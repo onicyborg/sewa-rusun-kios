@@ -72,9 +72,16 @@ class RusunController extends Controller
     public function getData(Request $request)
     {
         if ($request->ajax()) {
-            $data = Rusun::query(); // Ganti dengan query untuk mendapatkan data rusun
+            $data = Rusun::with(['sewa_rusun' => function ($query) {
+                $query->where('status', 'active');
+            }]); // Memuat relasi sewa_kios dengan kondisi status 'active'
+
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    // Memeriksa apakah ada relasi ke sewa_kios dengan status 'active'
+                    return $row->sewa_rusun->isNotEmpty() ? 'Disewa' : 'Kosong';
+                })
                 ->make(true);
         }
     }

@@ -12,4 +12,9 @@ class Kios extends Model
     protected $table = 'kios';
 
     protected $fillable = ['nama_kios', 'harga_kios'];
+
+    public function sewa_kios()
+    {
+        return $this->hasMany(SewaKios::class, 'kios_id', 'id');
+    }
 }

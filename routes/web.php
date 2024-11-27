@@ -6,7 +6,9 @@ use App\Http\Controllers\KiosController;
 use App\Http\Controllers\MekanikalController;
 use App\Http\Controllers\RusunController;
 use App\Http\Controllers\SewaGedungController;
+use App\Http\Controllers\SewaKiosController;
 use App\Http\Controllers\SewaRusunController;
+use App\Http\Controllers\TagihanKiosController;
 use App\Http\Controllers\TagihanRusunController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +53,14 @@ Route::middleware(['check.expired'])->group(function () {
             Route::put('/update-tagihan/{id}', [TagihanRusunController::class, 'update_tagihan'])->name('update.tagihan');
             Route::post('/release-tagihan/{bulan}/{tahun}', [TagihanRusunController::class, 'release_tagihan'])->name('release.tagihan');
 
+            Route::get('/sewa-kios', [SewaKiosController::class, 'index'])->name('sewa-kios.index');
+            Route::post('/sewa-kios/store', [SewaKiosController::class, 'store'])->name('sewa-kios.store');
+            Route::put('/sewa-kios/update/{id}', [SewaKiosController::class, 'update'])->name('sewa-kios.update');
+            Route::post('/tagihan-kios/add', [TagihanKiosController::class, 'tagihan_bulanan']);
+            Route::get('/detail-tagihan-bulanan-kios/{bulan}/{tahun}', [TagihanKiosController::class, 'detail_tagihan']);
+            Route::put('/update-tagihan-kios/{id}', [TagihanKiosController::class, 'update_tagihan'])->name('update.tagihan-kios');
+            Route::post('/release-tagihan-kios/{bulan}/{tahun}', [TagihanKiosController::class, 'release_tagihan'])->name('release.tagihan-kios');
+
             Route::get('/sewa-gedung', [SewaGedungController::class, 'index']);
             Route::post('/sewa-gedung/store', [SewaGedungController::class, 'store'])->name('sewa-gedung.store');
             Route::put('/sewa-gedung/update', [SewaGedungController::class, 'update'])->name('sewa-gedung.update');
@@ -61,6 +71,7 @@ Route::middleware(['check.expired'])->group(function () {
             Route::get('/kios-data', [KiosController::class, 'getData']);
             Route::get('/mekanikal-data', [MekanikalController::class, 'getData']);
             Route::get('/tagihan-rusun', [TagihanRusunController::class, 'index'])->name('tagihanRusun.index');
+            Route::get('/tagihan-kios', [TagihanKiosController::class, 'index'])->name('tagihanKios.index');
         });
 
         Route::group(['middleware' => 'role:user'], function () {

@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SewaRusun::class, 'user_id', 'id');
     }
+
+    public function sewa_kios()
+    {
+        return $this->hasMany(SewaKios::class, 'user_id', 'id');
+    }
 }

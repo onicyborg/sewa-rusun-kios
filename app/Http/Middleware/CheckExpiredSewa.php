@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SewaKios;
 use App\Models\SewaRusun;
 use Closure;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ class CheckExpiredSewa
 
         // Memperbarui status kontrak yang sudah lewat
         SewaRusun::where('tanggal_selesai_kontrak', '<', $today)
+                ->where('status', 'active')
+                ->update(['status' => 'expired']);
+
+        SewaKios::where('tanggal_selesai_kontrak', '<', $today)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
 

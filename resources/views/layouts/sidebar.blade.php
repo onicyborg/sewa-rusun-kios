@@ -50,7 +50,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="widgets.html">
+                <a href="/sewa-kios">
                     <i class="fas fa-store-alt"></i>
                     <p>Transaksi Sewa Kios</p>
                 </a>

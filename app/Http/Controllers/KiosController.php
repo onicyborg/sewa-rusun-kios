@@ -64,9 +64,16 @@ class KiosController extends Controller
     public function getData(Request $request)
     {
         if ($request->ajax()) {
-            $data = Kios::query(); // Ganti dengan query untuk mendapatkan data kios
+            $data = Kios::with(['sewa_kios' => function ($query) {
+                $query->where('status', 'active');
+            }]); // Memuat relasi sewa_kios dengan kondisi status 'active'
+
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status_penyewaan', function ($row) {
+                    // Memeriksa apakah ada relasi ke sewa_kios dengan status 'active'
+                    return $row->sewa_kios->isNotEmpty() ? 'Disewa' : 'Kosong';
+                })
                 ->make(true);
         }
     }

@@ -32,6 +32,7 @@
                                     <th>No</th>
                                     <th>Nama Kios</th>
                                     <th>Harga</th>
+                                    <th>Status Penyewaan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -40,6 +41,7 @@
                                     <th>No</th>
                                     <th>Nama Kios</th>
                                     <th>Harga</th>
+                                    <th>Status Penyewaan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </tfoot>
@@ -151,6 +153,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
+
             $('#KiosTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -169,6 +172,19 @@
                         data: 'harga_kios',
                         name: 'harga_kios'
                     },
+                    {
+                        data: 'status_penyewaan',
+                        name: 'status_penyewaan',
+                        render: function(data, type, row) {
+                            if (data === 'Kosong') {
+                                return '<span class="badge badge-success">Kosong / Belum Disewa</span>';
+                            } else if (data === 'Disewa') {
+                                return '<span class="badge badge-danger">Tidak Kosong / Disewa</span>';
+                            }
+                            return '<span class="badge badge-secondary">Status Tidak Diketahui</span>'; // Jika data tidak valid
+                        }
+                    },
+
                     {
                         data: null,
                         name: 'aksi',
@@ -202,9 +218,10 @@
         // Event listener untuk tombol Edit
         document.addEventListener('click', function(e) {
             if (e.target.closest('.editButton')) {
-                const id = e.target.getAttribute('data-id');
-                const namaKios = e.target.getAttribute('data-nama_kios');
-                const hargaKios = e.target.getAttribute('data-harga_kios');
+                const button = e.target.closest('.editButton');
+                const id = button.getAttribute('.data-id');
+                const namaKios = button.getAttribute('data-nama_kios');
+                const hargaKios = button.getAttribute('data-harga_kios');
 
                 // Isi data ke dalam form
                 editForm.querySelector('#editId').value = id;
@@ -216,7 +233,7 @@
         // Event listener untuk tombol Delete
         document.addEventListener('click', function(e) {
             if (e.target.closest('.deleteButton')) {
-                const button = event.relatedTarget; // Tombol yang memicu modal
+                const button = e.target.closest('.deleteButton'); // Tombol yang memicu modal
                 const id = button.getAttribute('data-id'); // Ambil data-id
                 const namaKios = button.getAttribute('data-nama_kios'); // Ambil data-nomor_kios
 
@@ -230,7 +247,6 @@
                     `Apakah Anda yakin ingin menghapus data Kios ${namaKios}?`;
             }
         });
-
 
         @if (session('success'))
             Swal.fire({
