@@ -175,6 +175,21 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-12 mt-4 d-none" id="historyContainer">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">History Penyewaan</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul id="historyList" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
@@ -284,12 +299,87 @@
                             data-nomor_rusun="${row.nomor_rusun}">
                             <i class="fas fa-trash"></i>
                         </button>
+                        <button type="button" class="btn btn-sm btn-info historyButton"
+                            data-id="${row.id}">
+                            <i class="fas fa-history"></i>
+                        </button>
                     `;
                         },
                     },
                 ],
             });
         });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.historyButton')) {
+                const button = e.target.closest('.historyButton');
+                const rusunId = button.getAttribute('data-id');
+
+                // Ambil data history penyewaan dari server
+                fetch(`/rusun/${rusunId}/history`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const historyContainer = document.getElementById('historyContainer');
+                        const historyList = document.getElementById('historyList');
+
+                        // Kosongkan list sebelumnya
+                        historyList.innerHTML = '';
+
+                        // Tambahkan data ke dalam list
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                const listItem = document.createElement('li');
+                                listItem.className = 'list-group-item';
+
+                                // Format tanggal
+                                const periodeAwal = formatDate(item.periode_awal);
+                                const periodeAkhir = formatDate(item.periode_akhir);
+
+                                // Baris pertama: Nama penyewa sebagai tautan
+                                const link = document.createElement('a');
+                                link.href = `/profile-show/${item.user_id}`; // URL detail pengguna
+                                link.textContent = `${item.nama_penyewa}`;
+                                link.className = 'text-primary';
+
+                                // Baris kedua: Periode kontrak
+                                const period = document.createElement('div');
+                                period.textContent = ` Periode Sewa: ${periodeAwal} s/d ${periodeAkhir}`;
+                                period.className = 'text-muted px-2';
+
+                                // Gabungkan ke dalam list item
+                                listItem.appendChild(link);
+                                listItem.appendChild(period);
+
+                                historyList.appendChild(listItem);
+                            });
+                        } else {
+                            const emptyItem = document.createElement('li');
+                            emptyItem.className = 'list-group-item text-muted';
+                            emptyItem.textContent = 'Belum ada data history penyewaan.';
+                            historyList.appendChild(emptyItem);
+                        }
+
+                        // Tampilkan container
+                        historyContainer.classList.remove('d-none');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching history:', error);
+                    });
+            }
+        });
+
+        // Fungsi untuk format tanggal
+        function formatDate(isoDate) {
+            const date = new Date(isoDate);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+
+
+
 
         @if (session('success'))
             Swal.fire({

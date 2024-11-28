@@ -15,4 +15,9 @@ class Mekanikal extends Model
         'name',
         'no_hp'
     ];
+
+    public function keluhan()
+    {
+        return $this->hasMany(Keluhan::class, 'mekanik_id', 'id');
+    }
 }

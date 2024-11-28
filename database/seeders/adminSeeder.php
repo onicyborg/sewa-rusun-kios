@@ -16,7 +16,7 @@ class adminSeeder extends Seeder
     {
         DB::table('users')->insert([
             'username' => 'admin',
-            'whatsapp' => '628123456789', // Masukkan nomor WA tanpa 0 di awal
+            'whatsapp' => '+628123456789', // Masukkan nomor WA tanpa 0 di awal
             'password' => Hash::make('admin123'), // Ganti dengan password sesuai kebutuhan
             'role' => 'admin', // Set role sebagai admin
             'name' => 'Administrator', // Default value agar tidak kosong

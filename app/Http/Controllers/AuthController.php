@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -60,6 +61,83 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
     }
 
+    public function update(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'whatsapp' => 'required|numeric',
+            'username' => 'required|string|max:255',
+            'nik' => 'nullable|string|max:255',
+            'ttl' => 'nullable|date',
+            'pendidikan' => 'nullable|string|max:255',
+            'jenis_pekerjaan' => 'nullable|string|max:255',
+            'penghasilan' => 'nullable|numeric',
+            'gender' => 'nullable|in:Pria,Wanita',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user = User::find(Auth::id());
+
+        // Update data yang wajib
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->whatsapp = '+62' . ltrim($validated['whatsapp'], '0');
+        $user->username = $validated['username'];
+
+        // Update data opsional
+        $user->nik = $request->nik;
+        $user->ttl = $request->ttl;
+        $user->pendidikan = $request->pendidikan;
+        $user->jenis_pekerjaan = $request->jenis_pekerjaan;
+        $user->penghasilan = $request->penghasilan;
+        $user->gender = $request->gender;
+
+        // Upload foto jika ada
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($user->foto) {
+                Storage::delete($user->foto);
+            }
+
+            // Simpan foto baru
+            $uuid = (string) Str::uuid();
+            // Ambil ekstensi file asli
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            // Simpan file dengan nama UUID dan ekstensi asli
+            $fotoPath = $request->file('foto')->storeAs('users/foto', $uuid . '.' . $extension, 'public');
+
+            $user->foto = $fotoPath;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function changePassword(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = User::find(Auth::id());
+
+        // Cek apakah password saat ini benar
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Password saat ini salah.']);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->back()->with('success', 'Password berhasil diperbarui.');
+    }
+
 
     public function login(Request $request)
     {
@@ -92,6 +170,15 @@ class AuthController extends Controller
         } else {
             // Login gagal, kembali ke halaman login dengan error
             return back()->with('error', 'Username / Email atau Password Salah');
+        }
+    }
+
+    public function profile()
+    {
+        if (Auth::user()->role == 'admin') {
+            return view('admin.profile-admin');
+        } else {
+            return view('users.profile-user');
         }
     }
 

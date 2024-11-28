@@ -31,4 +31,9 @@ class SewaRusun extends Model
     {
         return $this->hasMany(TagihanRusun::class, 'sewa_rusun_id', 'id');
     }
+
+    public function keluhan()
+    {
+        return $this->hasMany(Keluhan::class, 'sewa_rusun_id');
+    }
 }

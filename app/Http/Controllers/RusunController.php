@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rusun;
+use App\Models\SewaRusun;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -84,5 +85,23 @@ class RusunController extends Controller
                 })
                 ->make(true);
         }
+    }
+
+    public function getHistory($id)
+    {
+        $history = SewaRusun::where('rusun_id', $id)
+            ->with('penyewa') // Memuat data nama penyewa
+            ->select('id', 'user_id', 'tanggal_mulai_kontrak', 'tanggal_selesai_kontrak')
+            ->get()
+            ->map(function ($sewa) {
+                return [
+                    'nama_penyewa' => $sewa->penyewa->name ?? 'Tidak Diketahui', // Ambil nama penyewa
+                    'periode_awal' => $sewa->tanggal_mulai_kontrak,
+                    'periode_akhir' => $sewa->tanggal_selesai_kontrak,
+                    'user_id' => $sewa->penyewa->id
+                ];
+            });
+
+        return response()->json($history);
     }
 }

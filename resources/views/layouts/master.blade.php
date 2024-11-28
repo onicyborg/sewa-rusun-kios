@@ -409,7 +409,7 @@
                   >
                     <div class="avatar-sm">
                       <img
-                        src="{{ asset('assets/img/profile.jpg') }}"
+                        src="{{ Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : asset('assets/img/default.png') }}"
                         alt="..."
                         class="avatar-img rounded-circle"
                       />
@@ -425,20 +425,20 @@
                         <div class="user-box">
                           <div class="avatar-lg">
                             <img
-                              src="{{ asset('assets/img/profile.jpg') }}"
+                              src="{{ Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : asset('assets/img/default.png') }}"
                               alt="image profile"
                               class="avatar-img rounded"
                             />
                           </div>
                           <div class="u-text">
-                            <h4>Hizrian</h4>
+                            <h4>{{ Auth::user()->name }}</h4>
                             <p class="text-muted">{{ Auth::user()->email }}</p>
                           </div>
                         </div>
                       </li>
                       <li>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My Profile</a>
+                        <a class="dropdown-item" href="/profile">My Profile</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout">Logout</a>
                       </li>

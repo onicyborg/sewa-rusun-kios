@@ -19,7 +19,7 @@ class SewaGedungController extends Controller
 
         // Data penyewaan yang sudah lewat, diurutkan berdasarkan tanggal sewa terbaru
         $data_past = SewaGedung::where('tanggal_sewa', '<', $today)
-            ->orderBy('tanggal_sewa', 'desc')
+            ->orderBy('tanggal_sewa', 'asc')
             ->get();
 
         // Data untuk kalender (menampilkan semua penyewaan)

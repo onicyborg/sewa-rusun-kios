@@ -25,13 +25,11 @@
     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
         <div>
             <h3 class="fw-bold mb-3">List Tagihan Kios Bulan {{ $namaBulan[$bulan] . ' ' . $tahun }}
-                <td class="text-center">
-                    @if ($status == 'Release')
-                        <span class="badge badge-success">Release</span>
-                    @else
-                        <span class="badge badge-danger">Draft</span>
-                    @endif
-                </td>
+                @if ($status == 'Release')
+                    <span class="badge badge-success">Release</span>
+                @else
+                    <span class="badge badge-danger">Draft</span>
+                @endif
             </h3>
         </div>
     </div>
@@ -209,8 +207,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <form action="{{ route('release.tagihan-kios', ['bulan' => $bulan, 'tahun' => $tahun]) }}" method="POST"
-                        style="display: inline;">
+                    <form action="{{ route('release.tagihan-kios', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
+                        method="POST" style="display: inline;">
                         @csrf
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-rocket"></i> Rilis Tagihan
