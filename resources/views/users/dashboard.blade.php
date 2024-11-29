@@ -24,7 +24,13 @@
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
                                 <p class="card-category">Rusun Disewa</p>
-                                <h4 class="card-title">{{ 'Tower ' . $rusun->rusun->tower . ' Lt.' . $rusun->rusun->lantai . ' No. ' . $rusun->rusun->nomor_rusun }}</h4>
+                                @if ($rusun != null)
+                                    <h4 class="card-title">
+                                        {{ 'Tower ' . $rusun->rusun->tower . ' Lt.' . $rusun->rusun->lantai . ' No. ' . $rusun->rusun->nomor_rusun }}
+                                    </h4>
+                                @else
+                                    <h4 class="card-title">-</h4>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -43,7 +49,13 @@
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
                                 <p class="card-category">Kios Disewa</p>
-                                <h4 class="card-title">{{ $kios->kios->nama_kios }}</h4>
+                                @if ($kios != null)
+                                    <h4 class="card-title">
+                                        {{ $kios->kios->nama_kios }}
+                                    </h4>
+                                @else
+                                    <h4 class="card-title">-</h4>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -89,7 +101,8 @@
                     <div class="card-head-row card-tools-still-right">
                         <div class="card-title">Keluhan Anda</div>
                         <div class="card-tools">
-                            <a href="/keluhan" class="btn btn-info btn-sm"><i class="fas fa-rocket"></i>&nbsp; Cek Selengkapnya</a>
+                            <a href="/keluhan" class="btn btn-info btn-sm"><i class="fas fa-rocket"></i>&nbsp; Cek
+                                Selengkapnya</a>
                         </div>
                     </div>
                 </div>
@@ -106,24 +119,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($keluhans as $item)
+                                @if ($keluhans->isEmpty())
                                     <tr>
-                                        <th scope="row">
-                                            {{ 'Tower ' . $item->sewaRusun->rusun->tower . ' Lt.' . $item->sewaRusun->rusun->lantai . ' No. ' . $item->sewaRusun->rusun->nomor_rusun }}
-                                        </th>
-                                        <td class="text-end">{{ $item->deskripsi }}</td>
-                                        <td class="text-end">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
-                                        <td class="text-end">
-                                            @if ($item->status == 'Pending')
-                                                <span class="badge badge-danger">Pending</span>
-                                            @elseif ($item->status == 'Proses')
-                                                <span class="badge badge-warning">Proses</span>
-                                            @else
-                                                <span class="badge badge-success">Selesai</span>
-                                            @endif
-                                        </td>
+                                        <td colspan="4" class="text-center">Anda Belum Membuat Keluhan</td>
                                     </tr>
-                                @endforeach
+                                @else
+                                    @foreach ($keluhans as $item)
+                                        <tr>
+                                            <th scope="row">
+                                                {{ 'Tower ' . $item->sewaRusun->rusun->tower . ' Lt.' . $item->sewaRusun->rusun->lantai . ' No. ' . $item->sewaRusun->rusun->nomor_rusun }}
+                                            </th>
+                                            <td class="text-end">{{ $item->deskripsi }}</td>
+                                            <td class="text-end">
+                                                {{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
+                                            <td class="text-end">
+                                                @if ($item->status == 'Pending')
+                                                    <span class="badge badge-danger">Pending</span>
+                                                @elseif ($item->status == 'Proses')
+                                                    <span class="badge badge-warning">Proses</span>
+                                                @else
+                                                    <span class="badge badge-success">Selesai</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+
                             </tbody>
                         </table>
                     </div>
