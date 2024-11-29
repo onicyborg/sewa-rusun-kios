@@ -12,33 +12,57 @@ class TagihanUserController extends Controller
 {
     public function index()
     {
-        $tagihan_rusuns = SewaRusun::where('user_id', Auth::id())->where('status', 'active')->orderBy('created_at', 'DESC')->first()->tagihan->where('status_post', 'Release');
-        $tagihan_kioss = SewaKios::where('user_id', Auth::id())->where('status', 'active')->orderBy('created_at', 'DESC')->first()->tagihan->where('status_post', 'Release');
+        // Ambil data Sewa Rusun
+        $sewaRusun = SewaRusun::where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->orderBy('created_at', 'DESC')
+            ->first();
 
-        $kontak = User::where('role', 'admin')->first()->whatsapp;
+        $tagihan_rusuns = $sewaRusun ? $sewaRusun->tagihan->where('status_post', 'Release') : collect();
 
+        // Ambil data Sewa Kios
+        $sewaKios = SewaKios::where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        $tagihan_kioss = $sewaKios ? $sewaKios->tagihan->where('status_post', 'Release') : collect();
+
+        // Ambil kontak admin
+        $kontak = optional(User::where('role', 'admin')->first())->whatsapp;
+
+        // Inisialisasi total tagihan dan jumlah bulan belum dibayar
         $total_tagihan_rusun_belum_dibayar = 0;
         $total_bulan_rusun_belum_dibayar = 0;
         $total_tagihan_kios_belum_dibayar = 0;
         $total_bulan_kios_belum_dibayar = 0;
 
-        foreach($tagihan_rusuns as $item){
-            if($item->status_pembayaran != 'Dibayar'){
-                $total = $item->sewa + $item->denda + $item->air;
+        // Hitung total tagihan rusun yang belum dibayar
+        foreach ($tagihan_rusuns as $item) {
+            if ($item->status_pembayaran != 'Dibayar') {
+                $total = ($item->sewa ?? 0) + ($item->denda ?? 0) + ($item->air ?? 0);
                 $total_tagihan_rusun_belum_dibayar += $total;
-                $total_bulan_rusun_belum_dibayar ++;
+                $total_bulan_rusun_belum_dibayar++;
             }
         }
-        foreach($tagihan_kioss as $item){
-            if($item->status_pembayaran != 'Dibayar'){
-                $total = $item->sewa;
+
+        // Hitung total tagihan kios yang belum dibayar
+        foreach ($tagihan_kioss as $item) {
+            if ($item->status_pembayaran != 'Dibayar') {
+                $total = $item->sewa ?? 0;
                 $total_tagihan_kios_belum_dibayar += $total;
-                $total_bulan_kios_belum_dibayar ++;
+                $total_bulan_kios_belum_dibayar++;
             }
         }
 
-        // dd($kontak);
-
-        return view('users.tagihan', ['tagihan_rusuns' => $tagihan_rusuns, 'tagihan_kioss' => $tagihan_kioss, 'kontak' => $kontak, 'total_tagihan_rusun_belum_dibayar' => $total_tagihan_rusun_belum_dibayar, 'total_bulan_rusun_belum_dibayar' => $total_bulan_rusun_belum_dibayar, 'total_tagihan_kios_belum_dibayar' => $total_tagihan_kios_belum_dibayar, 'total_bulan_kios_belum_dibayar' => $total_bulan_kios_belum_dibayar]);
+        return view('users.tagihan', [
+            'tagihan_rusuns' => $tagihan_rusuns,
+            'tagihan_kioss' => $tagihan_kioss,
+            'kontak' => $kontak,
+            'total_tagihan_rusun_belum_dibayar' => $total_tagihan_rusun_belum_dibayar,
+            'total_bulan_rusun_belum_dibayar' => $total_bulan_rusun_belum_dibayar,
+            'total_tagihan_kios_belum_dibayar' => $total_tagihan_kios_belum_dibayar,
+            'total_bulan_kios_belum_dibayar' => $total_bulan_kios_belum_dibayar,
+        ]);
     }
 }
