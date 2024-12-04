@@ -44,7 +44,7 @@ class MekanikalController extends Controller
         $mekanikal = Mekanikal::find($request->id_update);
         $mekanikal->update([
             'name' => $request->name_update,
-            'no_hp' => $request->no_hp_update,
+            'no_hp' => '+62' . $request->no_hp_update,
         ]);
 
         // Redirect dengan pesan sukses
