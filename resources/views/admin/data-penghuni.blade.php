@@ -52,7 +52,13 @@
                                         <td>{{ $item->whatsapp }}</td>
 
                                         <!-- Menampilkan rusun yang sedang disewa -->
-                                        <td>{{ $item->sewa_rusun->first()->rusun->name ?? 'Belum Sewa' }}</td>
+                                        <td>
+                                            @if ($item->sewa_rusun->first()->rusun->nomor_rusun != null)
+                                                {{ 'Tower ' . $item->sewa_rusun->first()->rusun->tower . ' Lt.' . $item->sewa_rusun->first()->rusun->lantai . ' No. ' . $item->sewa_rusun->first()->rusun->nomor_rusun }}
+                                            @else
+                                                Belum Sewa
+                                            @endif
+                                        </td>
 
                                         <!-- Menampilkan kios yang sedang disewa -->
                                         <td>{{ $item->sewa_kios->first()->kios->nama_kios ?? 'Belum Sewa' }}</td>
